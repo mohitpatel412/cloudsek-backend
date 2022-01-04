@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const resultSchema = new mongoose.Schema({
+  result: {
+    type: Number,
+  },
   number1: {
     type: Number,
     required: true,
@@ -7,9 +10,6 @@ const resultSchema = new mongoose.Schema({
   number2: {
     type: Number,
     required: true,
-  },
-  result: {
-    type: Number,
   },
 });
 const Result = mongoose.model("Result", resultSchema);

@@ -10,22 +10,24 @@ resultRouter.get("/", (req, res) => {
 resultRouter.get(
   "/calculate/:number1/:number2",
   expressAsyncHandler(async (req, res) => {
-    let number1 = req.params.number1;
-    let number2 = req.params.number2;
-    const data = new Result({
-      number1: number1,
-      number2: number2,
-    });
+    const num1 = req.params.number1;
+    const num2 = req.params.number2;
+    let data;
     try {
+      data = new Result({
+        number1: num1,
+        number2: num2,
+      });
+
       data.save();
     } catch (err) {
       console.log(err);
-      res.status(500).json({
-        message: "Internal server error!!",
+      res.status(404).json({
+        message: "404 Error",
       });
     }
     res.status(200).json({
-      uniquieId: data._id,
+      id: data._id,
     });
   })
 );
@@ -33,9 +35,9 @@ resultRouter.get(
 resultRouter.get(
   "/get_answer/:idenitfier",
   expressAsyncHandler(async (req, res) => {
-    let idenitfier = req.params.idenitfier;
+    const data = req.params.idenitfier;
     try {
-      let result = await Result.findById(idenitfier);
+      const result = await Result.findById(data);
       result.result = Number(result.number1) + Number(result.number2);
 
       if (result.result) {
@@ -47,13 +49,13 @@ resultRouter.get(
         }, 10000);
       } else {
         res.status(200).json({
-          message: "Please Wait...",
+          message: "Couldn't find result!!",
         });
       }
     } catch (err) {
       console.log(err);
       res.status(404).json({
-        message: "Not Found",
+        message: "404 Error",
       });
     }
   })
